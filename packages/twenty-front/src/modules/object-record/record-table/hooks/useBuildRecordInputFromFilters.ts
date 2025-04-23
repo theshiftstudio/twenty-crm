@@ -1,6 +1,5 @@
 import { ObjectMetadataItem } from '@/object-metadata/types/ObjectMetadataItem';
 import { currentRecordFiltersComponentState } from '@/object-record/record-filter/states/currentRecordFiltersComponentState';
-import { FilterableFieldType } from '@/object-record/record-filter/types/FilterableFieldType';
 import { buildValueFromFilter } from '@/object-record/record-table/utils/buildRecordInputFromFilter';
 
 import { ObjectRecord } from '@/object-record/types/ObjectRecord';
@@ -26,9 +25,13 @@ export const useBuildRecordInputFromFilters = ({
       );
 
       if (isDefined(fieldMetadataItem)) {
+        const { operand, type, value } = filter;
         recordInput[fieldMetadataItem.name] = buildValueFromFilter({
-          filter,
-          type: fieldMetadataItem.type as FilterableFieldType,
+          filter: {
+            operand,
+            type,
+            value,
+          },
           options: fieldMetadataItem.options ?? undefined,
         });
       }
