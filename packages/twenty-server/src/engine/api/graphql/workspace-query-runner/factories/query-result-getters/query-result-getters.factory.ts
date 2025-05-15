@@ -233,7 +233,7 @@ export class QueryResultGettersFactory {
     objectMetadataItem: ObjectMetadataInterface,
     workspaceId: string,
     objectMetadataMaps: ObjectMetadataMaps,
-  ): Promise<any> {
+  ): Promise<QueryResultFieldValue> {
     return await this.processQueryResultField(
       result,
       objectMetadataItem.id,

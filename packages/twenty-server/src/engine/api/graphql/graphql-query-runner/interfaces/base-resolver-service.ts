@@ -5,9 +5,7 @@ import { PermissionsOnAllObjectRecords } from 'twenty-shared/constants';
 import { capitalize, isDefined } from 'twenty-shared/utils';
 import { ObjectLiteral } from 'typeorm';
 
-import { ObjectRecord } from 'src/engine/api/graphql/workspace-query-builder/interfaces/object-record.interface';
-import { IConnection } from 'src/engine/api/graphql/workspace-query-runner/interfaces/connection.interface';
-import { IEdge } from 'src/engine/api/graphql/workspace-query-runner/interfaces/edge.interface';
+import { QueryResultFieldValue } from 'src/engine/api/graphql/workspace-query-runner/factories/query-result-getters/interfaces/query-result-field-value';
 import { WorkspaceQueryRunnerOptions } from 'src/engine/api/graphql/workspace-query-runner/interfaces/query-runner-option.interface';
 import {
   ResolverArgs,
@@ -52,11 +50,7 @@ export type GraphqlQueryResolverExecutionArgs<Input extends ResolverArgs> = {
 @Injectable()
 export abstract class GraphqlQueryBaseResolverService<
   Input extends ResolverArgs,
-  Response extends
-    | ObjectRecord
-    | ObjectRecord[]
-    | IConnection<ObjectRecord, IEdge<ObjectRecord>>
-    | IConnection<ObjectRecord, IEdge<ObjectRecord>>[],
+  Response extends QueryResultFieldValue,
 > {
   @Inject()
   protected readonly workspaceQueryHookService: WorkspaceQueryHookService;
@@ -178,6 +172,7 @@ export abstract class GraphqlQueryBaseResolverService<
         resultWithGetters,
       );
 
+      //todo : fix type error here
       return resultWithGetters;
     } catch (error) {
       workspaceQueryRunnerGraphqlApiExceptionHandler(error, options);
@@ -274,7 +269,7 @@ export abstract class GraphqlQueryBaseResolverService<
   protected abstract resolve(
     executionArgs: GraphqlQueryResolverExecutionArgs<Input>,
     featureFlagsMap: Record<FeatureFlagKey, boolean>,
-  ): Promise<Response>;
+  ): Promise<QueryResultFieldValue>;
 
   protected abstract validate(
     args: Input,

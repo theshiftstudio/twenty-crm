@@ -70,7 +70,9 @@ export class WorkspaceQueryHookService {
 
     for (const postHookInstance of postHookInstances) {
       await this.workspaceQueryHookExplorer.handlePostHook(
-        [authContext, objectName, payload],
+        authContext,
+        objectName,
+        payload,
         postHookInstance.instance,
         postHookInstance.host,
         postHookInstance.isRequestScoped,

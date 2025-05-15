@@ -22,6 +22,7 @@ import { WorkspaceQueryHookKey } from 'src/engine/api/graphql/workspace-query-ru
 import { WorkspaceQueryHookStorage } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-hook/storage/workspace-query-hook.storage';
 import { WorkspaceQueryHookType } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-hook/types/workspace-query-hook.type';
 import { WorkspaceQueryHookMetadataAccessor } from 'src/engine/api/graphql/workspace-query-runner/workspace-query-hook/workspace-query-hook-metadata.accessor';
+import { AuthContext } from 'src/engine/core-modules/auth/types/auth-context.type';
 
 @Injectable()
 export class WorkspaceQueryHookExplorer implements OnModuleInit {
@@ -143,14 +144,16 @@ export class WorkspaceQueryHookExplorer implements OnModuleInit {
   }
 
   async handlePostHook(
-    executeParams: Parameters<WorkspacePostQueryHookInstance['execute']>,
+    authContext: AuthContext,
+    objectName: string,
+    payload: QueryResultFieldValue,
     instance: object,
     host: Module,
     isRequestScoped: boolean,
   ): Promise<ReturnType<WorkspacePostQueryHookInstance['execute']>> {
     const methodName = 'execute';
 
-    const transformedPayload = this.transformPayload(executeParams[2]);
+    const transformedPayload = this.transformPayload(payload);
 
     if (isRequestScoped) {
       const contextId = createContextId();
@@ -159,7 +162,7 @@ export class WorkspaceQueryHookExplorer implements OnModuleInit {
         this.moduleRef.registerRequestByContextId(
           {
             req: {
-              workspaceId: executeParams?.[0].workspace.id,
+              workspaceId: authContext.workspace.id,
             },
           },
           contextId,
@@ -175,15 +178,15 @@ export class WorkspaceQueryHookExplorer implements OnModuleInit {
 
       return contextInstance[methodName].call(
         contextInstance,
-        executeParams[0],
-        executeParams[1],
+        authContext,
+        objectName,
         transformedPayload,
       );
     } else {
       return instance[methodName].call(
         instance,
-        executeParams[0],
-        executeParams[1],
+        authContext,
+        objectName,
         transformedPayload,
       );
     }
