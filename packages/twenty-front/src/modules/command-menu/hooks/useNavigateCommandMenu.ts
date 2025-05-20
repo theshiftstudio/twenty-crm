@@ -122,6 +122,10 @@ export const useNavigateCommandMenu = () => {
           set(commandMenuNavigationRecordsState, []);
           set(commandMenuNavigationMorphItemByPageState, new Map());
         } else {
+          const lastNavigationStackItem = currentNavigationStack.at(-1);
+          if (lastNavigationStackItem?.pageId === computedPageId) {
+            return;
+          }
           set(commandMenuNavigationStackState, [
             ...currentNavigationStack,
             {
