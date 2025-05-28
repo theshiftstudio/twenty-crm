@@ -30,21 +30,23 @@ test('The workflow run visualizer shows the executed draft version without the l
 
   await launchTestButton.click();
 
-  const goToExecutionPageLink = page.getByRole('link', {
-    name: 'View execution details',
-  });
-  const executionPageUrl = await goToExecutionPageLink.getAttribute('href');
-  expect(executionPageUrl).not.toBeNull();
+  const goToWorkflowRunLink = await workflowVisualizer.commandMenu
+    .getByRole('link', {
+      name: 'Open',
+    })
+    .getAttribute('href');
+
+  await workflowVisualizer.closeSidePanel();
 
   await workflowVisualizer.deleteStep(firstStepId);
 
-  await page.goto(executionPageUrl!);
+  await page.goto(goToWorkflowRunLink!);
 
-  const workflowRunName = page
+  const workflowRunNameElement = page
     .getByText(`#1 - ${workflowVisualizer.workflowName}`)
     .nth(1);
 
-  await expect(workflowRunName).toBeVisible();
+  await expect(workflowRunNameElement).toBeVisible();
 
   const executedFirstStepNode = workflowVisualizer.getStepNode(firstStepId);
 
