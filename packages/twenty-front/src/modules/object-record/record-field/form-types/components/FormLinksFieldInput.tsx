@@ -13,6 +13,7 @@ type FormLinksFieldInputProps = {
   VariablePicker?: VariablePickerComponent;
   readonly?: boolean;
   placeholder?: string;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormLinksFieldInput = ({
@@ -22,6 +23,7 @@ export const FormLinksFieldInput = ({
   readonly,
   VariablePicker,
   placeholder,
+  autoFocus,
 }: FormLinksFieldInputProps) => {
   const handleChange =
     (field: keyof FieldLinksDraftValue) => (updatedLinksPart: string) => {
@@ -45,6 +47,7 @@ export const FormLinksFieldInput = ({
           placeholder={placeholder ?? 'Primary Link Label'}
           readonly={readonly}
           VariablePicker={VariablePicker}
+          autoFocus={autoFocus}
         />
         <FormTextFieldInput
           label="Primary Link URL"

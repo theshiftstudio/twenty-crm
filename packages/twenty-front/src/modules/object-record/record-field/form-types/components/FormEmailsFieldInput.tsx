@@ -11,6 +11,7 @@ type FormEmailsFieldInputProps = {
   onChange: (value: FieldEmailsValue) => void;
   VariablePicker?: VariablePickerComponent;
   readonly?: boolean;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormEmailsFieldInput = ({
@@ -19,6 +20,7 @@ export const FormEmailsFieldInput = ({
   onChange,
   readonly,
   VariablePicker,
+  autoFocus,
 }: FormEmailsFieldInputProps) => {
   const handleChange = (email: string) => {
     onChange({
@@ -38,6 +40,7 @@ export const FormEmailsFieldInput = ({
           placeholder={'Primary Email'}
           readonly={readonly}
           VariablePicker={VariablePicker}
+          autoFocus={autoFocus}
         />
       </FormNestedFieldInputContainer>
     </FormFieldInputContainer>

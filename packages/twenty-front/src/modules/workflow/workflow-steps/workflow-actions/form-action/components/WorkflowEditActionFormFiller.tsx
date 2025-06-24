@@ -117,7 +117,7 @@ export const WorkflowEditActionFormFiller = ({
         disabled
       />
       <WorkflowStepBody>
-        {formData.map((field) => {
+        {formData.map((field, index) => {
           if (field.type === 'RECORD') {
             const objectNameSingular = field.settings?.objectName;
 
@@ -169,6 +169,7 @@ export const WorkflowEditActionFormFiller = ({
               onError={(error) => {
                 setError(error);
               }}
+              autoFocus={index === 0}
             />
           );
         })}

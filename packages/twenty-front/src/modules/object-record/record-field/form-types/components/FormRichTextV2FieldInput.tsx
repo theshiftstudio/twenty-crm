@@ -12,6 +12,7 @@ type FormRichTextV2FieldInputProps = {
   readonly?: boolean;
   placeholder?: string;
   VariablePicker?: VariablePickerComponent;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormRichTextV2FieldInput = ({
@@ -24,6 +25,7 @@ export const FormRichTextV2FieldInput = ({
   onBlur,
   readonly,
   VariablePicker,
+  autoFocus,
 }: FormRichTextV2FieldInputProps) => {
   const handleChange = (value: string) => {
     onChange({
@@ -44,6 +46,7 @@ export const FormRichTextV2FieldInput = ({
       multiline
       readonly={readonly}
       VariablePicker={VariablePicker}
+      autoFocus={autoFocus}
     />
   );
 };

@@ -16,6 +16,7 @@ type FormCurrencyFieldInputProps = {
   onChange: (value: FormFieldCurrencyValue) => void;
   VariablePicker?: VariablePickerComponent;
   readonly?: boolean;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormCurrencyFieldInput = ({
@@ -24,6 +25,7 @@ export const FormCurrencyFieldInput = ({
   onChange,
   VariablePicker,
   readonly,
+  autoFocus,
 }: FormCurrencyFieldInputProps) => {
   const currencies = useMemo(() => {
     return [
@@ -71,6 +73,7 @@ export const FormCurrencyFieldInput = ({
           VariablePicker={VariablePicker}
           placeholder="Set 3210000 for $3.21"
           readonly={readonly}
+          autoFocus={autoFocus}
         />
       </FormNestedFieldInputContainer>
     </FormFieldInputContainer>

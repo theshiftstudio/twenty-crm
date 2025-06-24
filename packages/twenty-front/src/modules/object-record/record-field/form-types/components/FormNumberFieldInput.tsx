@@ -27,6 +27,7 @@ type FormNumberFieldInputProps = {
   onBlur?: () => void;
   VariablePicker?: VariablePickerComponent;
   hint?: string;
+  autoFocus?: boolean | undefined;
   readonly?: boolean;
   placeholder?: string;
   error?: string;
@@ -41,6 +42,7 @@ export const FormNumberFieldInput = ({
   onError,
   onBlur,
   VariablePicker,
+  autoFocus,
   hint,
   readonly,
   error: errorFromProps,
@@ -134,6 +136,7 @@ export const FormNumberFieldInput = ({
               }
               value={draftValue.value}
               copyButton={false}
+              autoFocus={autoFocus}
               hotkeyScope="record-create"
               onChange={handleChange}
               disabled={readonly}

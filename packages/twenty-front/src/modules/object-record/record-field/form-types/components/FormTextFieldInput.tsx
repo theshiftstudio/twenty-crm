@@ -22,6 +22,7 @@ type FormTextFieldInputProps = {
   readonly?: boolean;
   placeholder?: string;
   VariablePicker?: VariablePickerComponent;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormTextFieldInput = ({
@@ -35,11 +36,13 @@ export const FormTextFieldInput = ({
   multiline,
   readonly,
   VariablePicker,
+  autoFocus,
 }: FormTextFieldInputProps) => {
   const inputId = useId();
 
   const editor = useTextVariableEditor({
     placeholder: placeholder ?? 'Enter text',
+    autoFocus: autoFocus,
     multiline,
     readonly,
     defaultValue,
@@ -79,6 +82,7 @@ export const FormTextFieldInput = ({
             editor={editor}
             multiline={multiline}
             readonly={readonly}
+            autoFocus={autoFocus}
           />
         </FormFieldInputInnerContainer>
 

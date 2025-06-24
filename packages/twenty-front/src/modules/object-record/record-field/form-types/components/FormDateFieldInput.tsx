@@ -8,6 +8,7 @@ type FormDateFieldInputProps = {
   VariablePicker?: VariablePickerComponent;
   readonly?: boolean;
   placeholder?: string;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormDateFieldInput = ({
@@ -17,6 +18,7 @@ export const FormDateFieldInput = ({
   VariablePicker,
   readonly,
   placeholder,
+  autoFocus,
 }: FormDateFieldInputProps) => {
   return (
     <FormDateTimeFieldInput
@@ -27,6 +29,7 @@ export const FormDateFieldInput = ({
       VariablePicker={VariablePicker}
       readonly={readonly}
       placeholder={placeholder}
+      autoFocus={autoFocus}
     />
   );
 };

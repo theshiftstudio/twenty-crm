@@ -58,6 +58,7 @@ type FormFieldInputProps = {
   placeholder?: string;
   error?: string;
   onError?: (error: string | undefined) => void;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormFieldInput = ({
@@ -69,6 +70,7 @@ export const FormFieldInput = ({
   placeholder,
   error,
   onError,
+  autoFocus,
 }: FormFieldInputProps) => {
   return isFieldNumber(field) ? (
     <FormNumberFieldInput
@@ -80,6 +82,7 @@ export const FormFieldInput = ({
       placeholder={placeholder}
       error={error}
       onError={onError}
+      autoFocus={autoFocus}
     />
   ) : isFieldBoolean(field) ? (
     <FormBooleanFieldInput
@@ -97,6 +100,7 @@ export const FormFieldInput = ({
       VariablePicker={VariablePicker}
       readonly={readonly}
       placeholder={placeholder}
+      autoFocus={autoFocus}
     />
   ) : isFieldSelect(field) ? (
     <FormSelectFieldInput
@@ -114,6 +118,7 @@ export const FormFieldInput = ({
       onChange={onChange}
       VariablePicker={VariablePicker}
       readonly={readonly}
+      autoFocus={autoFocus}
     />
   ) : isFieldAddress(field) ? (
     <FormAddressFieldInput
@@ -122,6 +127,7 @@ export const FormFieldInput = ({
       onChange={onChange}
       VariablePicker={VariablePicker}
       readonly={readonly}
+      autoFocus={autoFocus}
     />
   ) : isFieldLinks(field) ? (
     <FormLinksFieldInput
@@ -130,6 +136,7 @@ export const FormFieldInput = ({
       onChange={onChange}
       VariablePicker={VariablePicker}
       readonly={readonly}
+      autoFocus={autoFocus}
     />
   ) : isFieldEmails(field) ? (
     <FormEmailsFieldInput
@@ -138,6 +145,7 @@ export const FormFieldInput = ({
       onChange={onChange}
       VariablePicker={VariablePicker}
       readonly={readonly}
+      autoFocus={autoFocus}
     />
   ) : isFieldPhones(field) ? (
     <FormPhoneFieldInput
@@ -146,6 +154,7 @@ export const FormFieldInput = ({
       onChange={onChange}
       VariablePicker={VariablePicker}
       readonly={readonly}
+      autoFocus={autoFocus}
     />
   ) : isFieldDate(field) ? (
     <FormDateFieldInput
@@ -155,6 +164,7 @@ export const FormFieldInput = ({
       VariablePicker={VariablePicker}
       readonly={readonly}
       placeholder={placeholder}
+      autoFocus={autoFocus}
     />
   ) : isFieldDateTime(field) ? (
     <FormDateTimeFieldInput
@@ -163,6 +173,7 @@ export const FormFieldInput = ({
       onChange={onChange}
       VariablePicker={VariablePicker}
       readonly={readonly}
+      autoFocus={autoFocus}
     />
   ) : isFieldMultiSelect(field) ? (
     <FormMultiSelectFieldInput
@@ -182,6 +193,7 @@ export const FormFieldInput = ({
       VariablePicker={VariablePicker}
       readonly={readonly}
       placeholder={placeholder}
+      autoFocus={autoFocus}
     />
   ) : isFieldUuid(field) ? (
     <FormUuidFieldInput
@@ -191,6 +203,7 @@ export const FormFieldInput = ({
       VariablePicker={VariablePicker}
       readonly={readonly}
       placeholder={placeholder}
+      autoFocus={autoFocus}
     />
   ) : isFieldCurrency(field) ? (
     <FormCurrencyFieldInput
@@ -199,6 +212,7 @@ export const FormFieldInput = ({
       onChange={onChange}
       VariablePicker={VariablePicker}
       readonly={readonly}
+      autoFocus={autoFocus}
     />
   ) : isFieldRichTextV2(field) ? (
     <FormRichTextV2FieldInput
@@ -208,6 +222,7 @@ export const FormFieldInput = ({
       VariablePicker={VariablePicker}
       readonly={readonly}
       placeholder={placeholder}
+      autoFocus={autoFocus}
     />
   ) : isFieldRelationToOneObject(field) ? (
     <FormRelationToOneFieldInput

@@ -16,6 +16,7 @@ type FormPhoneFieldInputProps = {
   onChange: (value: FieldPhonesValue) => void;
   VariablePicker?: VariablePickerComponent;
   readonly?: boolean;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormPhoneFieldInput = ({
@@ -24,6 +25,7 @@ export const FormPhoneFieldInput = ({
   onChange,
   readonly,
   VariablePicker,
+  autoFocus,
 }: FormPhoneFieldInputProps) => {
   const handleCountryChange = (
     newCountry: FormCountryCodeSelectInputUpdatedValue,
@@ -68,6 +70,7 @@ export const FormPhoneFieldInput = ({
           placeholder="Enter phone number"
           hint="Without calling code"
           readonly={readonly}
+          autoFocus={autoFocus}
         />
       </FormNestedFieldInputContainer>
     </FormFieldInputContainer>

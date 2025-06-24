@@ -19,6 +19,7 @@ type FormRawJsonFieldInputProps = {
   readonly?: boolean;
   VariablePicker?: VariablePickerComponent;
   placeholder?: string;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormRawJsonFieldInput = ({
@@ -30,10 +31,12 @@ export const FormRawJsonFieldInput = ({
   onBlur,
   readonly,
   VariablePicker,
+  autoFocus,
 }: FormRawJsonFieldInputProps) => {
   const inputId = useId();
 
   const editor = useTextVariableEditor({
+    autoFocus,
     placeholder: placeholder ?? 'Enter a JSON object',
     multiline: true,
     readonly,

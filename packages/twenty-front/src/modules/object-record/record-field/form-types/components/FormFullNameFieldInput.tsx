@@ -13,6 +13,7 @@ type FormFullNameFieldInputProps = {
   onChange: (value: FieldFullNameValue) => void;
   VariablePicker?: VariablePickerComponent;
   readonly?: boolean;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormFullNameFieldInput = ({
@@ -21,6 +22,7 @@ export const FormFullNameFieldInput = ({
   onChange,
   readonly,
   VariablePicker,
+  autoFocus,
 }: FormFullNameFieldInputProps) => {
   const handleFirstNameChange = (newText: string) => {
     onChange({
@@ -48,6 +50,7 @@ export const FormFullNameFieldInput = ({
             FIRST_NAME_PLACEHOLDER_WITH_SPECIAL_CHARACTER_TO_AVOID_PASSWORD_MANAGERS
           }
           readonly={readonly}
+          autoFocus={autoFocus}
           VariablePicker={VariablePicker}
         />
         <FormTextFieldInput

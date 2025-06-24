@@ -74,6 +74,7 @@ type FormDateTimeFieldInputProps = {
   placeholder?: string;
   VariablePicker?: VariablePickerComponent;
   readonly?: boolean;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormDateTimeFieldInput = ({
@@ -84,6 +85,7 @@ export const FormDateTimeFieldInput = ({
   VariablePicker,
   readonly,
   placeholder,
+  autoFocus,
 }: FormDateTimeFieldInputProps) => {
   const { parseToString, parseToDate } = useDateParser({
     isDateTimeInput: !dateOnly,
@@ -100,7 +102,7 @@ export const FormDateTimeFieldInput = ({
       : {
           type: 'static',
           value: defaultValue ?? null,
-          mode: 'view',
+          mode: autoFocus ? 'edit' : 'view',
         },
   );
 

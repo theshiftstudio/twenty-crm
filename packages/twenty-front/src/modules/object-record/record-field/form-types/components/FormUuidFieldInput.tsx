@@ -21,6 +21,7 @@ type FormUuidFieldInputProps = {
   readonly?: boolean;
   VariablePicker?: VariablePickerComponent;
   placeholder?: string;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormUuidFieldInput = ({
@@ -30,6 +31,7 @@ export const FormUuidFieldInput = ({
   onChange,
   readonly,
   VariablePicker,
+  autoFocus,
 }: FormUuidFieldInputProps) => {
   const inputId = useId();
 
@@ -106,6 +108,7 @@ export const FormUuidFieldInput = ({
               hotkeyScope="record-create"
               disabled={readonly}
               onChange={handleChange}
+              autoFocus={autoFocus}
             />
           ) : (
             <VariableChipStandalone

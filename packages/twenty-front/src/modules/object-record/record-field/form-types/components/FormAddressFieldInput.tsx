@@ -13,6 +13,7 @@ type FormAddressFieldInputProps = {
   onChange: (value: FieldAddressValue) => void;
   VariablePicker?: VariablePickerComponent;
   readonly?: boolean;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormAddressFieldInput = ({
@@ -21,6 +22,7 @@ export const FormAddressFieldInput = ({
   onChange,
   readonly,
   VariablePicker,
+  autoFocus,
 }: FormAddressFieldInputProps) => {
   const handleChange =
     (field: keyof FieldAddressDraftValue) => (updatedAddressPart: string) => {
@@ -49,6 +51,7 @@ export const FormAddressFieldInput = ({
           readonly={readonly}
           VariablePicker={VariablePicker}
           placeholder="Street address"
+          autoFocus={autoFocus}
         />
         <FormTextFieldInput
           label="Address 2"

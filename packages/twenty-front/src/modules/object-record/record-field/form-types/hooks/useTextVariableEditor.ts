@@ -15,6 +15,7 @@ type UseTextVariableEditorProps = {
   readonly: boolean | undefined;
   defaultValue: string | undefined | null;
   onUpdate: (editor: Editor) => void;
+  autoFocus?: boolean | undefined;
 };
 
 export const useTextVariableEditor = ({
@@ -22,9 +23,11 @@ export const useTextVariableEditor = ({
   multiline,
   readonly,
   defaultValue,
+  autoFocus,
   onUpdate,
 }: UseTextVariableEditorProps) => {
   const editor = useEditor({
+    autofocus: autoFocus,
     extensions: [
       Document,
       Paragraph,
