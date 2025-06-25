@@ -57,6 +57,7 @@ export type DropdownProps = {
   onOpen?: () => void;
   excludedClickOutsideIds?: string[];
   isDropdownInModal?: boolean;
+  autoFocus?: boolean | undefined;
 };
 
 export const Dropdown = ({
@@ -74,8 +75,9 @@ export const Dropdown = ({
   clickableComponentWidth = 'auto',
   excludedClickOutsideIds,
   isDropdownInModal = false,
+  autoFocus,
 }: DropdownProps) => {
-  const { isDropdownOpen, toggleDropdown } = useDropdown(dropdownId);
+  const { isDropdownOpen, toggleDropdown } = useDropdown(dropdownId, autoFocus);
 
   const isUsingOffset =
     isDefined(dropdownOffset?.x) || isDefined(dropdownOffset?.y);

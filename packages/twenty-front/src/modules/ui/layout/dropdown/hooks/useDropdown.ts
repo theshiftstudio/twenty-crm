@@ -8,10 +8,14 @@ import { useRemoveFocusItemFromFocusStack } from '@/ui/utilities/focus/hooks/use
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
 import { GlobalHotkeysConfig } from '@/ui/utilities/hotkey/types/GlobalHotkeysConfig';
 import { HotkeyScope } from '@/ui/utilities/hotkey/types/HotkeyScope';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
-export const useDropdown = (dropdownId?: string) => {
+export const useDropdown = (dropdownId?: string, initOpen = false) => {
+  // eslint-disable-next-line @nx/workspace-no-state-useref
+  const initializedRef = useRef(false);
+
   const { pushFocusItemToFocusStack } = usePushFocusItemToFocusStack();
+
   const { removeFocusItemFromFocusStack } = useRemoveFocusItemFromFocusStack();
 
   const { scopeId, isDropdownOpenState, dropdownPlacementState } =
@@ -86,6 +90,13 @@ export const useDropdown = (dropdownId?: string) => {
       openDropdown(globalHotkeysConfig);
     }
   };
+
+  useEffect(() => {
+    if (initOpen && !initializedRef.current) {
+      toggleDropdown();
+      initializedRef.current = true;
+    }
+  }, [initOpen, toggleDropdown]);
 
   return {
     scopeId,

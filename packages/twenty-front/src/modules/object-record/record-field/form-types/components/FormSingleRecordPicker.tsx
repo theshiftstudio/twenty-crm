@@ -65,6 +65,7 @@ export type FormSingleRecordPickerProps = {
   disabled?: boolean;
   testId?: string;
   VariablePicker?: VariablePickerComponent;
+  autoFocus?: boolean | undefined;
 };
 
 export const FormSingleRecordPicker = ({
@@ -75,6 +76,7 @@ export const FormSingleRecordPicker = ({
   disabled,
   testId,
   VariablePicker,
+  autoFocus,
 }: FormSingleRecordPickerProps) => {
   const theme = useTheme();
   const draftValue: FormSingleRecordPickerValue = isStandaloneVariableString(
@@ -167,6 +169,7 @@ export const FormSingleRecordPicker = ({
             onClose={handleCloseRelationPickerDropdown}
             onOpen={handleOpenDropdown}
             dropdownOffset={{ y: parseInt(theme.spacing(1), 10) }}
+            autoFocus={autoFocus}
             clickableComponent={
               <StyledFormSelectContainer
                 hasRightElement={isDefined(VariablePicker) && !disabled}

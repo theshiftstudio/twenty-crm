@@ -142,6 +142,7 @@ export const WorkflowEditActionFormFiller = ({
                 }}
                 objectNameSingular={objectNameSingular}
                 disabled={actionOptions.readonly}
+                autoFocus={index === 0}
               />
             );
           }

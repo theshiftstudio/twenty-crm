@@ -15,6 +15,7 @@ export type FormRelationToOneFieldInputProps = {
   onChange: (value: JsonValue) => void;
   readonly?: boolean;
   VariablePicker?: VariablePickerComponent;
+  autoFocus?: boolean | undefined;
 };
 
 const isFieldRelationToOneValue = (
@@ -30,6 +31,7 @@ export const FormRelationToOneFieldInput = ({
   defaultValue,
   readonly,
   VariablePicker,
+  autoFocus,
 }: FormRelationToOneFieldInputProps) => {
   return (
     isDefined(objectNameSingular) && (
@@ -44,6 +46,7 @@ export const FormRelationToOneFieldInput = ({
         objectNameSingular={objectNameSingular}
         disabled={readonly}
         VariablePicker={VariablePicker}
+        autoFocus={autoFocus}
       />
     )
   );

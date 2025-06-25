@@ -234,6 +234,7 @@ export const FormFieldInput = ({
       onChange={onChange}
       VariablePicker={VariablePicker}
       readonly={readonly}
+      autoFocus={autoFocus}
     />
   ) : null;
 };
