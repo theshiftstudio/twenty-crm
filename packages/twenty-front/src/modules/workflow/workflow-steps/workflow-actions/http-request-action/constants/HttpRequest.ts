@@ -12,7 +12,7 @@ export type HttpMethodWithBody = (typeof METHODS_WITH_BODY)[number];
 
 export type HttpMethod = (typeof HTTP_METHODS)[number]['value'];
 
-export type HttpRequestBody = Record<
+export type DeprecatedHttpRequestBody = Record<
   string,
   string | number | boolean | null | Array<string | number | boolean | null>
 >;
@@ -21,7 +21,7 @@ export type HttpRequestFormData = {
   url: string;
   method: HttpMethod;
   headers: Record<string, string>;
-  body?: HttpRequestBody;
+  body?: DeprecatedHttpRequestBody | string;
 };
 
 export const DEFAULT_JSON_BODY_PLACEHOLDER =

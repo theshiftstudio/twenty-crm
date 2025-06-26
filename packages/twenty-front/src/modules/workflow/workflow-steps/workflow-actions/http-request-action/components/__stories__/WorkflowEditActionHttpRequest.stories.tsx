@@ -35,7 +35,7 @@ const DEFAULT_ACTION: WorkflowHttpRequestAction = {
   },
 };
 
-const CONFIGURED_ACTION: WorkflowHttpRequestAction = {
+const CONFIGURED_ACTION_OLD_BODY_FORMAT: WorkflowHttpRequestAction = {
   id: getWorkflowNodeIdMock(),
   name: 'API Call',
   type: 'HTTP_REQUEST',
@@ -52,6 +52,33 @@ const CONFIGURED_ACTION: WorkflowHttpRequestAction = {
         name: 'Test',
         value: 123,
       },
+    },
+    outputSchema: {},
+    errorHandlingOptions: {
+      retryOnFailure: {
+        value: true,
+      },
+      continueOnFailure: {
+        value: false,
+      },
+    },
+  },
+};
+
+const CONFIGURED_ACTION: WorkflowHttpRequestAction = {
+  id: getWorkflowNodeIdMock(),
+  name: 'API Call',
+  type: 'HTTP_REQUEST',
+  valid: true,
+  settings: {
+    input: {
+      url: 'https://api.example.com/data',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer token123',
+      },
+      body: '{"name": "Test", "value": 123, "number": {{trigger.recordId}}}',
     },
     outputSchema: {},
     errorHandlingOptions: {
@@ -100,6 +127,31 @@ export const Default: Story = {
     expect(await canvas.findByText('URL')).toBeVisible();
     expect(await canvas.findByText('HTTP Method')).toBeVisible();
     expect(await canvas.findByText('Headers Input')).toBeVisible();
+  },
+};
+
+export const ConfiguredWithOldBodyFormat: Story = {
+  args: {
+    action: CONFIGURED_ACTION_OLD_BODY_FORMAT,
+    actionOptions: {
+      onActionUpdate: fn(),
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const header = await canvas.findByTestId('workflow-step-header');
+    const headerCanvas = within(header);
+    expect(await headerCanvas.findByText('API Call')).toBeVisible();
+
+    const urlLabel = await canvas.findByText('URL');
+    const urlInputContainer = urlLabel.closest('div')?.nextElementSibling;
+    const urlEditor = urlInputContainer?.querySelector('.ProseMirror');
+    expect(urlEditor).toBeVisible();
+    expect(urlEditor).toHaveTextContent('https://api.example.com/data');
+
+    expect(await canvas.findByText('POST')).toBeVisible();
+    expect(await canvas.findByText('Body Input')).toBeVisible();
   },
 };
 

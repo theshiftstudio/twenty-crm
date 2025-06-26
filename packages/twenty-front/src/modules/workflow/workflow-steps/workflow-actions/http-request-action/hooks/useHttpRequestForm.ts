@@ -2,7 +2,10 @@ import { WorkflowHttpRequestAction } from '@/workflow/types/Workflow';
 import { isMethodWithBody } from '@/workflow/workflow-steps/workflow-actions/http-request-action/utils/isMethodWithBody';
 import { useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
-import { HttpRequestBody, HttpRequestFormData } from '../constants/HttpRequest';
+import {
+  DeprecatedHttpRequestBody,
+  HttpRequestFormData,
+} from '../constants/HttpRequest';
 
 export type UseHttpRequestFormParams = {
   action: WorkflowHttpRequestAction;
@@ -43,7 +46,7 @@ export const useHttpRequestForm = ({
 
   const handleFieldChange = (
     field: keyof HttpRequestFormData,
-    value: string | HttpRequestBody | undefined,
+    value: string | DeprecatedHttpRequestBody | undefined,
   ) => {
     let newFormData = { ...formData, [field]: value };
 

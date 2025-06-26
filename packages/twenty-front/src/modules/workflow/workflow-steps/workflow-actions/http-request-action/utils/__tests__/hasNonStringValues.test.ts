@@ -1,4 +1,4 @@
-import { HttpRequestBody } from '../../constants/HttpRequest';
+import { DeprecatedHttpRequestBody } from '../../constants/HttpRequest';
 import { hasNonStringValues } from '../hasNonStringValues';
 
 describe('hasNonStringValues', () => {
@@ -15,22 +15,22 @@ describe('hasNonStringValues', () => {
   });
 
   it('should return false for object with null values', () => {
-    const body: HttpRequestBody = { key1: null, key2: 'value' };
+    const body: DeprecatedHttpRequestBody = { key1: null, key2: 'value' };
     expect(hasNonStringValues(body)).toBe(false);
   });
 
   it('should return true for object with number values', () => {
-    const body: HttpRequestBody = { key1: 'value1', key2: 123 };
+    const body: DeprecatedHttpRequestBody = { key1: 'value1', key2: 123 };
     expect(hasNonStringValues(body)).toBe(true);
   });
 
   it('should return true for object with boolean values', () => {
-    const body: HttpRequestBody = { key1: 'value1', key2: true };
+    const body: DeprecatedHttpRequestBody = { key1: 'value1', key2: true };
     expect(hasNonStringValues(body)).toBe(true);
   });
 
   it('should return true for object with array values', () => {
-    const body: HttpRequestBody = {
+    const body: DeprecatedHttpRequestBody = {
       key1: 'value1',
       key2: [1, 'two', true, null],
     };

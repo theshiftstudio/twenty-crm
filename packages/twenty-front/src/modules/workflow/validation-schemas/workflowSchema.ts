@@ -110,22 +110,24 @@ export const workflowFormActionSettingsSchema =
     ),
   });
 
+const workflowHttpRequestActionSettingsOldBodySchema = z.record(
+  z.union([
+    z.string(),
+    z.number(),
+    z.boolean(),
+    z.null(),
+    z.array(z.union([z.string(), z.number(), z.boolean(), z.null()])),
+  ]),
+);
+
 export const workflowHttpRequestActionSettingsSchema =
   baseWorkflowActionSettingsSchema.extend({
     input: z.object({
       url: z.string(),
       method: z.enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']),
       headers: z.record(z.string()).optional(),
-      body: z
-        .record(
-          z.union([
-            z.string(),
-            z.number(),
-            z.boolean(),
-            z.null(),
-            z.array(z.union([z.string(), z.number(), z.boolean(), z.null()])),
-          ]),
-        )
+      body: workflowHttpRequestActionSettingsOldBodySchema
+        .or(z.string())
         .optional(),
     }),
   });

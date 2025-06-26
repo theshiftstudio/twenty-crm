@@ -1,17 +1,25 @@
 import { FormFieldInputContainer } from '@/object-record/record-field/form-types/components/FormFieldInputContainer';
 import { FormRawJsonFieldInput } from '@/object-record/record-field/form-types/components/FormRawJsonFieldInput';
 
+import { FormTextFieldInput } from '@/object-record/record-field/form-types/components/FormTextFieldInput';
 import { InputLabel } from '@/ui/input/components/InputLabel';
 import { Select } from '@/ui/input/components/Select';
 import {
+  HttpContentType,
+  httpContentTypeSchema,
+} from '@/workflow/workflow-steps/workflow-actions/http-request-action/constants/HttpContentTypeSchema';
+import {
   DEFAULT_JSON_BODY_PLACEHOLDER,
-  HttpRequestBody,
+  DeprecatedHttpRequestBody,
 } from '@/workflow/workflow-steps/workflow-actions/http-request-action/constants/HttpRequest';
-import { hasNonStringValues } from '@/workflow/workflow-steps/workflow-actions/http-request-action/utils/hasNonStringValues';
 import { WorkflowVariablePicker } from '@/workflow/workflow-variables/components/WorkflowVariablePicker';
+import { CAPTURE_ALL_VARIABLE_TAG_INNER_REGEX } from '@/workflow/workflow-variables/constants/CaptureAllVariableTagInnerRegex';
 import styled from '@emotion/styled';
+import { isString } from '@sniptt/guards';
 import { useState } from 'react';
+import { parseJson } from 'twenty-shared/utils';
 import { IconFileText, IconKey } from 'twenty-ui/display';
+import { SelectOption } from 'twenty-ui/input';
 import { KeyValuePairInput } from './KeyValuePairInput';
 
 const StyledContainer = styled.div`
@@ -26,21 +34,32 @@ const StyledSelectDropdown = styled(Select)`
 
 type BodyInputProps = {
   label?: string;
-  defaultValue?: HttpRequestBody;
-  onChange: (value?: HttpRequestBody) => void;
+  defaultValue?: DeprecatedHttpRequestBody | string;
+  defaultContentType?: string;
+  onChange: (value?: DeprecatedHttpRequestBody | string) => void;
   readonly?: boolean;
 };
 
 export const BodyInput = ({
   defaultValue,
+  defaultContentType,
   onChange,
   readonly,
 }: BodyInputProps) => {
-  const [isRawJson, setIsRawJson] = useState<boolean>(() =>
-    hasNonStringValues(defaultValue),
+  const defaultBodyAsObject = isString(defaultValue)
+    ? (parseJson<DeprecatedHttpRequestBody>(defaultValue) ?? defaultValue)
+    : defaultValue;
+
+  const [contentType, setContentType] = useState<HttpContentType | null>(
+    () =>
+      httpContentTypeSchema.safeParse(defaultContentType).data ??
+      'application/json',
   );
+
   const [jsonString, setJsonString] = useState<string | null>(
-    JSON.stringify(defaultValue, null, 2),
+    isString(defaultValue)
+      ? defaultValue
+      : JSON.stringify(defaultValue, null, 2),
   );
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
@@ -51,7 +70,14 @@ export const BodyInput = ({
     }
 
     try {
-      JSON.parse(value);
+      const valueWithoutVariables = value.replaceAll(
+        CAPTURE_ALL_VARIABLE_TAG_INNER_REGEX,
+        'null',
+      );
+      console.log({ valueWithoutVariables });
+
+      JSON.parse(valueWithoutVariables);
+
       setErrorMessage(undefined);
       return true;
     } catch (e) {
@@ -75,8 +101,15 @@ export const BodyInput = ({
     }
 
     try {
-      const parsed = JSON.parse(value);
-      onChange(parsed);
+      const valueWithoutVariables = value.replaceAll(
+        CAPTURE_ALL_VARIABLE_TAG_INNER_REGEX,
+        'null',
+      );
+      console.log({ valueWithoutVariables });
+
+      JSON.parse(valueWithoutVariables);
+
+      onChange(value);
     } catch {
       // Do nothing, validation will happen on blur
     }
@@ -97,19 +130,29 @@ export const BodyInput = ({
   return (
     <FormFieldInputContainer>
       <InputLabel>Body Input</InputLabel>
+
       <StyledSelectDropdown
-        options={[
-          { label: 'Key/Value', value: 'keyValue', Icon: IconKey },
-          { label: 'Raw JSON', value: 'rawJson', Icon: IconFileText },
-        ]}
-        dropdownId="body-input-mode"
-        value={isRawJson ? 'rawJson' : 'keyValue'}
-        onChange={(value) => handleModeChange(value === 'rawJson')}
+        options={
+          [
+            { label: 'json', value: 'application/json', Icon: IconFileText },
+            { label: 'form-data', value: 'multipart/form-data', Icon: IconKey },
+            {
+              label: 'x-www-form-urlencoded',
+              value: 'application/x-www-form-urlencoded',
+              Icon: IconKey,
+            },
+            { label: 'text', value: 'text/plain', Icon: IconKey },
+            { label: 'none', value: null, Icon: IconFileText },
+          ] satisfies SelectOption<HttpContentType | null>[]
+        }
+        dropdownId="body-content-type"
+        value={contentType}
+        onChange={(value) => setContentType(value as HttpContentType | null)}
         disabled={readonly}
       />
 
       <StyledContainer>
-        {isRawJson ? (
+        {contentType === 'application/json' ? (
           <FormRawJsonFieldInput
             placeholder={DEFAULT_JSON_BODY_PLACEHOLDER}
             readonly={readonly}
@@ -119,6 +162,18 @@ export const BodyInput = ({
             onChange={handleJsonChange}
             VariablePicker={WorkflowVariablePicker}
           />
+        ) : contentType === 'text/plain' ? (
+          <FormTextFieldInput
+            placeholder="Enter plain text body content"
+            readonly={readonly}
+            defaultValue={jsonString}
+            error={errorMessage}
+            onBlur={handleBlur}
+            onChange={handleJsonChange}
+            VariablePicker={WorkflowVariablePicker}
+          />
+        ) : contentType === null ? (
+          <div>No body</div>
         ) : (
           <KeyValuePairInput
             defaultValue={defaultValue as Record<string, string>}

@@ -1,6 +1,8 @@
-import { HttpRequestBody } from '../constants/HttpRequest';
+import { DeprecatedHttpRequestBody } from '../constants/HttpRequest';
 
-export const hasNonStringValues = (obj?: HttpRequestBody): boolean => {
+export const hasNonStringValues = (
+  obj?: DeprecatedHttpRequestBody,
+): boolean => {
   if (!obj) {
     return false;
   }
