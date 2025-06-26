@@ -172,9 +172,7 @@ export const BodyInput = ({
             onChange={handleJsonChange}
             VariablePicker={WorkflowVariablePicker}
           />
-        ) : contentType === null ? (
-          <div>No body</div>
-        ) : (
+        ) : contentType === null ? null : (
           <KeyValuePairInput
             defaultValue={defaultValue as Record<string, string>}
             onChange={handleKeyValueChange}
