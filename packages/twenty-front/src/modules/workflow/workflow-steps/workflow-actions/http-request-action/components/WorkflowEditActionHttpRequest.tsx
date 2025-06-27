@@ -7,6 +7,7 @@ import { WorkflowStepHeader } from '@/workflow/workflow-steps/components/Workflo
 import { useWorkflowActionHeader } from '@/workflow/workflow-steps/workflow-actions/hooks/useWorkflowActionHeader';
 
 import { GenericDropdownContentWidth } from '@/ui/layout/dropdown/constants/GenericDropdownContentWidth';
+import { httpContentTypeSchema } from '@/workflow/validation-schemas/workflowSchema';
 import { isMethodWithBody } from '@/workflow/workflow-steps/workflow-actions/http-request-action/utils/isMethodWithBody';
 import { WorkflowVariablePicker } from '@/workflow/workflow-variables/components/WorkflowVariablePicker';
 import { useTheme } from '@emotion/react';
@@ -47,7 +48,15 @@ export const WorkflowEditActionHttpRequest = ({
     readonly: actionOptions.readonly === true,
   });
 
-  const contentTypeHeader = new Headers(formData.headers).get('Content-Type');
+  const headers = new Headers(formData.headers);
+
+  const contentTypeHeader =
+    formData.bodyContentType ??
+    httpContentTypeSchema
+      .optional()
+      .catch(undefined)
+      .default('application/json')
+      .safeParse(headers.get('Content-Type')).data;
 
   const { outputSchema, handleOutputSchemaChange, error } =
     useHttpRequestOutputSchema({

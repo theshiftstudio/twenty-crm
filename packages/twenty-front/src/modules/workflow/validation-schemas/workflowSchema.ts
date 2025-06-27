@@ -120,12 +120,20 @@ const workflowHttpRequestActionSettingsOldBodySchema = z.record(
   ]),
 );
 
+export const httpContentTypeSchema = z.enum([
+  'application/json',
+  'multipart/form-data',
+  'application/x-www-form-urlencoded',
+  'text/plain',
+]);
+
 export const workflowHttpRequestActionSettingsSchema =
   baseWorkflowActionSettingsSchema.extend({
     input: z.object({
       url: z.string(),
       method: z.enum(['GET', 'POST', 'PUT', 'PATCH', 'DELETE']),
       headers: z.record(z.string()).optional(),
+      bodyContentType: httpContentTypeSchema.optional(),
       body: workflowHttpRequestActionSettingsOldBodySchema
         .or(z.string())
         .optional(),

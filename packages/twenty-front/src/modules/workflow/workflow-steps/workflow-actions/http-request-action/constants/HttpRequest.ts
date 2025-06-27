@@ -1,3 +1,6 @@
+import { workflowHttpRequestActionSettingsSchema } from '@/workflow/validation-schemas/workflowSchema';
+import { z } from 'zod';
+
 export const HTTP_METHODS = [
   { label: 'GET', value: 'GET' },
   { label: 'POST', value: 'POST' },
@@ -17,12 +20,11 @@ export type DeprecatedHttpRequestBody = Record<
   string | number | boolean | null | Array<string | number | boolean | null>
 >;
 
-export type HttpRequestFormData = {
-  url: string;
-  method: HttpMethod;
-  headers: Record<string, string>;
-  body?: DeprecatedHttpRequestBody | string;
-};
+export type HttpRequestBody = Record<string, string> | string;
+
+export type HttpRequestFormData = z.infer<
+  typeof workflowHttpRequestActionSettingsSchema
+>['input'];
 
 export const DEFAULT_JSON_BODY_PLACEHOLDER =
   '{\n  "key": "value"\n "another_key": "{{workflow.variable}}" \n}';

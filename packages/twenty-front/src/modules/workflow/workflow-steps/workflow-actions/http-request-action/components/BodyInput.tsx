@@ -4,10 +4,7 @@ import { FormRawJsonFieldInput } from '@/object-record/record-field/form-types/c
 import { FormTextFieldInput } from '@/object-record/record-field/form-types/components/FormTextFieldInput';
 import { InputLabel } from '@/ui/input/components/InputLabel';
 import { Select } from '@/ui/input/components/Select';
-import {
-  HttpContentType,
-  httpContentTypeSchema,
-} from '@/workflow/workflow-steps/workflow-actions/http-request-action/constants/HttpContentTypeSchema';
+import { HttpContentType } from '@/workflow/workflow-steps/workflow-actions/http-request-action/constants/HttpContentTypeSchema';
 import {
   DEFAULT_JSON_BODY_PLACEHOLDER,
   DeprecatedHttpRequestBody,
@@ -35,8 +32,11 @@ const StyledSelectDropdown = styled(Select)`
 type BodyInputProps = {
   label?: string;
   defaultValue?: DeprecatedHttpRequestBody | string;
-  defaultContentType?: string;
-  onChange: (value?: DeprecatedHttpRequestBody | string) => void;
+  defaultContentType?: HttpContentType;
+  onChange: (changes: {
+    value: string;
+    bodyContentType?: HttpContentType | null;
+  }) => void;
   readonly?: boolean;
 };
 
@@ -51,9 +51,7 @@ export const BodyInput = ({
     : defaultValue;
 
   const [contentType, setContentType] = useState<HttpContentType | null>(
-    () =>
-      httpContentTypeSchema.safeParse(defaultContentType).data ??
-      'application/json',
+    defaultContentType ?? 'application/json',
   );
 
   const [jsonString, setJsonString] = useState<string | null>(
@@ -87,7 +85,10 @@ export const BodyInput = ({
   };
 
   const handleKeyValueChange = (value: Record<string, string>) => {
-    onChange(value);
+    onChange({
+      bodyContentType: contentType,
+      value: value,
+    });
     setErrorMessage(undefined);
   };
 
