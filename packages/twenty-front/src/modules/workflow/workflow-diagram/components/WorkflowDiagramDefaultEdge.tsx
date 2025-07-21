@@ -2,9 +2,13 @@ import { WorkflowDiagramEdgeV1 } from '@/workflow/workflow-diagram/components/Wo
 import { WorkflowDiagramEdgeV2Empty } from '@/workflow/workflow-diagram/components/WorkflowDiagramEdgeV2Empty';
 import { WorkflowDiagramEdgeV2Filter } from '@/workflow/workflow-diagram/components/WorkflowDiagramEdgeV2Filter';
 import { CREATE_STEP_NODE_WIDTH } from '@/workflow/workflow-diagram/constants/CreateStepNodeWidth';
+import { EDGE_GRAY_CIRCLE_MARKED_ID } from '@/workflow/workflow-diagram/constants/EdgeGrayCircleMarkedId';
+import { EDGE_GREEN_CIRCLE_MARKED_ID } from '@/workflow/workflow-diagram/constants/EdgeGreenCircleMarkedId';
+import { EDGE_GREEN_ROUNDED_ARROW_MARKER_ID } from '@/workflow/workflow-diagram/constants/EdgeGreenRoundedArrowMarkerId';
+import { EDGE_ROUNDED_ARROW_MARKER_ID } from '@/workflow/workflow-diagram/constants/EdgeRoundedArrowMarkerId';
 import { WorkflowDiagramEdge } from '@/workflow/workflow-diagram/types/WorkflowDiagram';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
-import { useTheme } from '@emotion/react';
+import { Theme, useTheme } from '@emotion/react';
 import {
   BaseEdge,
   EdgeLabelRenderer,
@@ -12,17 +16,48 @@ import {
   getStraightPath,
 } from '@xyflow/react';
 import { isDefined } from 'twenty-shared/utils';
+import { StepStatus } from 'twenty-shared/workflow';
 import { FeatureFlagKey } from '~/generated/graphql';
 
 type WorkflowDiagramDefaultEdgeProps = EdgeProps<WorkflowDiagramEdge>;
+
+const toMarkerId = (id: string) => `url(#${id})`;
+
+const getMarkerStart = (edgeExecutionStatus: StepStatus | undefined) => {
+  if (edgeExecutionStatus === StepStatus.SUCCESS) {
+    return EDGE_GREEN_CIRCLE_MARKED_ID;
+  }
+
+  return EDGE_GRAY_CIRCLE_MARKED_ID;
+};
+
+const getMarkerEnd = (edgeExecutionStatus: StepStatus | undefined) => {
+  if (edgeExecutionStatus === StepStatus.SUCCESS) {
+    return EDGE_GREEN_ROUNDED_ARROW_MARKER_ID;
+  }
+
+  return EDGE_ROUNDED_ARROW_MARKER_ID;
+};
+
+const getStrokeColor = ({
+  theme,
+  edgeExecutionStatus,
+}: {
+  theme: Theme;
+  edgeExecutionStatus: StepStatus | undefined;
+}) => {
+  if (edgeExecutionStatus === StepStatus.SUCCESS) {
+    return theme.tag.text.turquoise;
+  }
+
+  return theme.border.color.strong;
+};
 
 export const WorkflowDiagramDefaultEdge = ({
   source,
   target,
   sourceY,
   targetY,
-  markerStart,
-  markerEnd,
   data,
 }: WorkflowDiagramDefaultEdgeProps) => {
   const theme = useTheme();
@@ -50,13 +85,21 @@ export const WorkflowDiagramDefaultEdge = ({
   const displayFilters =
     isWorkflowFilteringEnabled && data.edgeType === 'filter';
 
+  const markerStart = getMarkerStart(data.edgeExecutionStatus);
+  const markerEnd = getMarkerEnd(data.edgeExecutionStatus);
+
   return (
     <>
       <BaseEdge
-        markerStart={markerStart}
-        markerEnd={markerEnd}
+        markerStart={toMarkerId(markerStart)}
+        markerEnd={toMarkerId(markerEnd)}
         path={edgePath}
-        style={{ stroke: theme.border.color.strong }}
+        style={{
+          stroke: getStrokeColor({
+            theme,
+            edgeExecutionStatus: data.edgeExecutionStatus,
+          }),
+        }}
       />
 
       <EdgeLabelRenderer>

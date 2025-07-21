@@ -1,5 +1,4 @@
 import { WorkflowStep, WorkflowTrigger } from '@/workflow/types/Workflow';
-import { WORKFLOW_VISUALIZER_EDGE_SUCCESS_CONFIGURATION } from '@/workflow/workflow-diagram/constants/WorkflowVisualizerEdgeSuccessConfiguration';
 import {
   WorkflowRunDiagram,
   WorkflowRunDiagramNode,
@@ -9,7 +8,7 @@ import { generateWorkflowDiagram } from '@/workflow/workflow-diagram/utils/gener
 import { isStepNode } from '@/workflow/workflow-diagram/utils/isStepNode';
 import { transformFilterNodesAsEdges } from '@/workflow/workflow-diagram/utils/transformFilterNodesAsEdges';
 import { isDefined } from 'twenty-shared/utils';
-import { WorkflowRunStepInfos, StepStatus } from 'twenty-shared/workflow';
+import { StepStatus, WorkflowRunStepInfos } from 'twenty-shared/workflow';
 
 export const generateWorkflowRunDiagram = ({
   trigger,
@@ -85,14 +84,17 @@ export const generateWorkflowRunDiagram = ({
       return edge;
     }
 
-    if (stepInfo.status === 'SUCCESS') {
-      return {
-        ...edge,
-        ...WORKFLOW_VISUALIZER_EDGE_SUCCESS_CONFIGURATION,
-      };
+    if (!isDefined(edge.data)) {
+      throw new Error('Edge data must be defined');
     }
 
-    return edge;
+    return {
+      ...edge,
+      data: {
+        ...edge.data,
+        edgeExecutionStatus: stepInfo.status,
+      },
+    };
   });
 
   return {
