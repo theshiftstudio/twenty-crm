@@ -15,6 +15,7 @@ import { CREATE_STEP_NODE_WIDTH } from '@/workflow/workflow-diagram/constants/Cr
 import { WORKFLOW_DIAGRAM_EDGE_OPTIONS_CLICK_OUTSIDE_ID } from '@/workflow/workflow-diagram/constants/WorkflowDiagramEdgeOptionsClickOutsideId';
 import { useOpenWorkflowEditFilterInCommandMenu } from '@/workflow/workflow-diagram/hooks/useOpenWorkflowEditFilterInCommandMenu';
 import { useStartNodeCreation } from '@/workflow/workflow-diagram/hooks/useStartNodeCreation';
+import { workflowDiagramIsCreatingFilterComponentState } from '@/workflow/workflow-diagram/states/workflowDiagramIsCreatingFilterComponentState';
 import { workflowDiagramPanOnDragComponentState } from '@/workflow/workflow-diagram/states/workflowDiagramPanOnDragComponentState';
 import {
   WorkflowDiagramEdge,
@@ -120,6 +121,10 @@ export const WorkflowDiagramFilterEdgeEditable = ({
   const { openWorkflowEditFilterInCommandMenu } =
     useOpenWorkflowEditFilterInCommandMenu();
 
+  const setWorkflowDiagramIsCreatingFilter = useSetRecoilComponentStateV2(
+    workflowDiagramIsCreatingFilterComponentState,
+  );
+
   const handleMouseEnter = () => {
     setHovered(true);
   };
@@ -129,6 +134,10 @@ export const WorkflowDiagramFilterEdgeEditable = ({
   };
 
   const handleFilterButtonClick = () => {
+    console.log('in handleFilterButtonClick');
+
+    setWorkflowDiagramIsCreatingFilter(true);
+
     openWorkflowEditFilterInCommandMenu({
       stepId: data.stepId,
       stepName: data.name,

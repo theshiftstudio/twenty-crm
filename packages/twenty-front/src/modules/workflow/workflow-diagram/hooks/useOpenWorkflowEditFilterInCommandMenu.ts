@@ -1,15 +1,21 @@
+import { ActionMenuContext } from '@/action-menu/contexts/ActionMenuContext';
 import { useWorkflowCommandMenu } from '@/command-menu/hooks/useWorkflowCommandMenu';
+import { commandMenuNavigationStackState } from '@/command-menu/states/commandMenuNavigationStackState';
 import { useRecoilComponentValueV2 } from '@/ui/utilities/state/component-state/hooks/useRecoilComponentValueV2';
 import { useSetRecoilComponentStateV2 } from '@/ui/utilities/state/component-state/hooks/useSetRecoilComponentStateV2';
 import { workflowVisualizerWorkflowIdComponentState } from '@/workflow/states/workflowVisualizerWorkflowIdComponentState';
 import { workflowDiagramComponentState } from '@/workflow/workflow-diagram/states/workflowDiagramComponentState';
 import { workflowSelectedNodeComponentState } from '@/workflow/workflow-diagram/states/workflowSelectedNodeComponentState';
 import { getActionIcon } from '@/workflow/workflow-steps/workflow-actions/utils/getActionIcon';
+import { useContext } from 'react';
+import { useSetRecoilState } from 'recoil';
 import { isDefined } from 'twenty-shared/utils';
 import { useIcons } from 'twenty-ui/display';
 
 export const useOpenWorkflowEditFilterInCommandMenu = () => {
   const { getIcon } = useIcons();
+
+  const { isInRightDrawer } = useContext(ActionMenuContext);
 
   const workflowVisualizerWorkflowId = useRecoilComponentValueV2(
     workflowVisualizerWorkflowIdComponentState,
@@ -21,6 +27,9 @@ export const useOpenWorkflowEditFilterInCommandMenu = () => {
   );
   const setWorkflowDiagram = useSetRecoilComponentStateV2(
     workflowDiagramComponentState,
+  );
+  const setCommandMenuNavigationStack = useSetRecoilState(
+    commandMenuNavigationStackState,
   );
 
   const openWorkflowEditFilterInCommandMenu = ({
@@ -51,6 +60,12 @@ export const useOpenWorkflowEditFilterInCommandMenu = () => {
         })),
       };
     });
+
+    if (!isInRightDrawer) {
+      setCommandMenuNavigationStack([]);
+    }
+
+    console.log('open filter in command menu');
 
     openWorkflowEditStepInCommandMenu(
       workflowVisualizerWorkflowId,

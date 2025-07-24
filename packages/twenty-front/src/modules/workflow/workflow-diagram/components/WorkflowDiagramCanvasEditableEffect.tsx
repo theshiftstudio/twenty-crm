@@ -5,12 +5,14 @@ import { ActionMenuContext } from '@/action-menu/contexts/ActionMenuContext';
 import { commandMenuNavigationStackState } from '@/command-menu/states/commandMenuNavigationStackState';
 
 import { useWorkflowCommandMenu } from '@/command-menu/hooks/useWorkflowCommandMenu';
+import { useRecoilComponentStateV2 } from '@/ui/utilities/state/component-state/hooks/useRecoilComponentStateV2';
 import { useRecoilComponentValueV2 } from '@/ui/utilities/state/component-state/hooks/useRecoilComponentValueV2';
 import { useSetRecoilComponentStateV2 } from '@/ui/utilities/state/component-state/hooks/useSetRecoilComponentStateV2';
 import { workflowVisualizerWorkflowIdComponentState } from '@/workflow/states/workflowVisualizerWorkflowIdComponentState';
 import { EMPTY_TRIGGER_STEP_ID } from '@/workflow/workflow-diagram/constants/EmptyTriggerStepId';
 import { useStartNodeCreation } from '@/workflow/workflow-diagram/hooks/useStartNodeCreation';
 import { useTriggerNodeSelection } from '@/workflow/workflow-diagram/hooks/useTriggerNodeSelection';
+import { workflowDiagramIsCreatingFilterComponentState } from '@/workflow/workflow-diagram/states/workflowDiagramIsCreatingFilterComponentState';
 import { workflowSelectedNodeComponentState } from '@/workflow/workflow-diagram/states/workflowSelectedNodeComponentState';
 import {
   WorkflowDiagramNode,
@@ -44,14 +46,20 @@ export const WorkflowDiagramCanvasEditableEffect = () => {
   const workflowVisualizerWorkflowId = useRecoilComponentValueV2(
     workflowVisualizerWorkflowIdComponentState,
   );
+  const [workflowDiagramIsCreatingFilter, setWorkflowDiagramIsCreatingFilter] =
+    useRecoilComponentStateV2(workflowDiagramIsCreatingFilterComponentState);
 
   const handleSelectionChange = useCallback(
     ({ nodes }: OnSelectionChangeParams) => {
       const selectedNode = nodes[0] as WorkflowDiagramNode | undefined;
 
-      if (!isInRightDrawer) {
+      console.log('handleSelectionChange', { workflowDiagramIsCreatingFilter });
+
+      if (!isInRightDrawer && !workflowDiagramIsCreatingFilter) {
         setCommandMenuNavigationStack([]);
       }
+
+      setWorkflowDiagramIsCreatingFilter(false);
 
       if (!isDefined(selectedNode)) {
         return;
@@ -91,14 +99,16 @@ export const WorkflowDiagramCanvasEditableEffect = () => {
       }
     },
     [
+      workflowDiagramIsCreatingFilter,
       isInRightDrawer,
-      setCommandMenuNavigationStack,
+      setWorkflowSelectedNode,
       workflowVisualizerWorkflowId,
+      setCommandMenuNavigationStack,
+      setWorkflowDiagramIsCreatingFilter,
       openWorkflowTriggerTypeInCommandMenu,
       startNodeCreation,
       openWorkflowEditStepInCommandMenu,
       getIcon,
-      setWorkflowSelectedNode,
     ],
   );
 
